@@ -1,0 +1,63 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>select 등록 / 수정</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+function submit(){
+	// form data 로 보낼 때 -> serialize
+	// var form = $('#board').serialize();
+	var selected = $('#number option:selected').val();
+	console.log(selected);
+	
+	$.ajax({
+		url : "/select.do",
+		type : "POST",
+		dataType : "json",
+		// controller 에서 받는 이름 : controller 로 보내는 이름 
+		data : {number : selected}, 
+		success : function(data){
+		    var number = data.number;
+		    
+		    // ajax 로 받아온 데이터 value 에 바로 넣을 때 
+//		    document.getElementById('number1').value = number;
+
+            // id number 의 option 모두 삭제 
+//          $('#number').children().remove(); 
+            
+            // id number 의 1 첫번째 option 만 삭제  
+//          document.getElementById('number').options[0].remove();
+            
+            // id number 의 option 모두 삭제 후 다시 option 생성
+            $('#number').children().remove();
+            var innerHTML = '<option value=""> '+number+' </option>';
+                innerHTML +='<option value="1이당">1</option>';
+                innerHTML +='<option value="2이당">2</option>';
+                innerHTML +='<option value="3이당">3</option>';
+            // select 제일 끝에 option 붙여줌
+            $('#number').append(innerHTML);    
+                
+		}, 
+		error : function(xhr, status) {
+			alert('에러당');
+		}
+	});
+ }
+</script>
+</head>
+<body>
+<!-- ajax 의 method 와 form 의 method 가 겹치면 에러나는 것 같음.. -->
+<!-- <form name="board" id="board"> --> 
+<select id="number">
+<option id="number1" value="">선택</option>
+<option value="1이당">1</option>
+<option value="2이당">2</option>
+<option value="3이당">3</option>
+</select>
+<button type="button" id="button" onclick='submit()'>클릭</button>
+<!-- </form> -->
+</body>
+</html>
